@@ -122,4 +122,43 @@ class HomePageState extends State<HomePage> {
       }
     });
   }
+
+  // Verifica si el juego ha terminado.
+  bool gameOver() {
+    for (int i = 0; i < snakePosition.length; i++) {
+      int count = 0;
+      for (int j = 0; j < snakePosition.length; j++) {
+        if (snakePosition[i] == snakePosition[j]) {
+          count +=
+              1; // Cuenta las veces que un segmento de la serpiente ocupa la misma posición.
+        }
+        if (count == 2) {
+          return true; // Si un segmento colisiona con otro, el juego termina.
+        }
+      }
+    }
+    return false;
+  }
+
+  // Muestra una alerta cuando el juego termina.
+  void _showGameOverScreen() {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('YOU DIED'), // Título de la alerta.
+            content: Text(
+                'Your score: ${snakePosition.length}'), // Muestra la puntuación.
+            actions: <Widget>[
+              TextButton(
+                child: Text('Play Again'), // Botón para reiniciar el juego.
+                onPressed: () {
+                  startGame();
+                  Navigator.of(context).pop(); // Cierra el cuadro de diálogo.
+                },
+              )
+            ],
+          );
+        });
+  }
 }
