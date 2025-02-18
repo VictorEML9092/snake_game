@@ -69,4 +69,57 @@ class HomePageState extends State<HomePage> {
   }
 
   var direction = 'down'; // Dirección inicial de la serpiente.
+
+  // Actualiza la posición de la serpiente.
+  void updateSnake() {
+    setState(() {
+      switch (direction) {
+        case 'down':
+          if (snakePosition.last > 740) {
+            // Si llega al borde inferior, reaparece en la parte superior.
+            snakePosition.add(snakePosition.last + 20 - 760);
+          } else {
+            snakePosition.add(snakePosition.last + 20); // Mueve hacia abajo.
+          }
+          break;
+
+        case 'up':
+          if (snakePosition.last < 20) {
+            // Si llega al borde superior, reaparece abajo.
+            snakePosition.add(snakePosition.last - 20 - 760);
+          } else {
+            snakePosition.add(snakePosition.last - 20); // Mueve hacia arriba.
+          }
+          break;
+
+        case 'left':
+          if (snakePosition.last % 20 == 0) {
+            // Si llega al borde izquierdo, reaparece en el derecho.
+            snakePosition.add(snakePosition.last - 1 + 20);
+          } else {
+            snakePosition
+                .add(snakePosition.last - 1); // Mueve hacia la izquierda.
+          }
+          break;
+
+        case 'right':
+          if ((snakePosition.last + 1) % 20 == 0) {
+            // Si llega al borde derecho, reaparece en el izquierdo.
+            snakePosition.add(snakePosition.last + 1 + 20);
+          } else {
+            snakePosition
+                .add(snakePosition.last + 1); // Mueve hacia la derecha.
+          }
+          break;
+      }
+
+      if (snakePosition.last == food) {
+        // Si la serpiente come la comida.
+        generateNewFood(); // Genera nueva comida.
+      } else {
+        snakePosition.removeAt(
+            0); // Elimina el último segmento para simular el movimiento.
+      }
+    });
+  }
 }
